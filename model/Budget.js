@@ -33,12 +33,5 @@ const BudgetSchema = new mongoose.Schema({
     timestamps: true,
 });
 
-BudgetSchema.post("save", async function (doc) {
-    await Saving.create({
-        userId: doc.userId,
-        amount: this.savingGoal
-    })
-})
-
 const Budget = mongoose.model("Budget", BudgetSchema);
 export default Budget;

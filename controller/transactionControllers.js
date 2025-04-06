@@ -1,11 +1,13 @@
 import Transaction from "../model/Trasaction.js";
+import Income from "../model/Income.js";
 
 const createTransaction = async (req, res) => {
     const { title, amount, date, type, category } = req.body;
     const userId = req.user._id; // Assuming you have user ID from authentication middleware
-    const filterdDate = new Date(date).toISOString().split("T")[0]; // Format date to YYYY-MM-DD
-    
     try {
+        const filterdDate = new Date(date);
+
+        //ceate Transaction
         const transaction = await Transaction.create({
             userId: userId,
             title,
@@ -14,7 +16,20 @@ const createTransaction = async (req, res) => {
             type,
             category
         });
+
+        // Only create Income if the type is "income"
+        if (type === "income") {
+            await Income.create({
+                userId: userId,
+                amount: amount,
+                date: filterdDate,
+                type: type,
+                transactionId: transaction._id,
+                totalIncome: 0,
+            })
+        }
         return res.status(201).json(transaction);
+
     } catch (error) {
         console.error("Error creating transaction:", error);
         return res.status(500).json({ success: false, message: "Internal server error" });

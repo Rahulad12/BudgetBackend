@@ -1,16 +1,16 @@
 import Transaction from "../model/Trasaction.js";
 
 const createTransaction = async (req, res) => {
-
     const { title, amount, date, type, category } = req.body;
     const userId = req.user._id; // Assuming you have user ID from authentication middleware
-
+    const filterdDate = new Date(date).toISOString().split("T")[0]; // Format date to YYYY-MM-DD
+    
     try {
         const transaction = await Transaction.create({
-            userId,
+            userId: userId,
             title,
             amount,
-            date,
+            date: filterdDate,
             type,
             category
         });

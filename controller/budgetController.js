@@ -1,28 +1,26 @@
-import Budget from "../model/Budget";
-import Income from "../model/Income";
-import Saving from "../model/Saving";
-import Transaction from "../model/Trasaction";
+import Budget from "../model/Budget.js";
+import Income from "../model/Income.js";
+import Transaction from "../model/Trasaction.js";
 
 const createBudget = async (req, res) => {
-    const { monthlyExpense, expensesThreshold, savingGoal } = req.body;
+    const { monthlyexpense, expensethreshold, savinggoal } = req.body;
     const userId = req.user._id;
     try {
 
-        const income = await Income.find({ userId: userId });
-        const transaction = await Transaction.find({ userId: userId });
-        const saving = await Saving.find({ userId: userId });
+        const income = await Income.findOne({ userId: userId });
+        const transaction = await Transaction.findOne({ userId: userId });
 
         const budget = await Budget.create({
             userId,
             transactionId: transaction._id,
-            saving: saving._id,
             income: income._id,
-            monthlyExpense,
-            expensesThreshold,
-            savingGoal,
+            monthlyExpense: monthlyexpense,
+            expensesThreshold: expensethreshold,
+            savingGoal: savinggoal,
         })
+
         const createdBudget = await budget.save();
-        if (!createBudget) {
+        if (!createdBudget) {
             return res.status(400).json({
                 success: false,
                 message: "Budget Created Failed"
@@ -44,7 +42,7 @@ const createBudget = async (req, res) => {
 const getBudget = async (req, res) => {
     const userId = req.user._id;
     try {
-        const budget = await Budget.find({ userId: userId })
+        const budget = await Budget.find({ userId: userId }).populate("transactionId").populate("income");
         if (!budget) {
             return res.status(400).json({
                 success: false,

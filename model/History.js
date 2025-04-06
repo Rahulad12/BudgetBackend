@@ -26,3 +26,6 @@ const HistorySchema = new mongoose.Schema({
 }, {
     timestamps: true,
 });
+
+const History = mongoose.model("History", HistorySchema);
+export default History;

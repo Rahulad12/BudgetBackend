@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import Saving from "./Saving";
+import Saving from "./Saving.js";
 const BudgetSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -16,17 +16,13 @@ const BudgetSchema = new mongoose.Schema({
         required: true,
         ref: "Income",
     },
-    saving: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-        ref: "Saving",
-    },
     monthlyExpense: {
         type: Number,
         required: true,
     },
     expensesThreshold: {
         type: Number,
+        enum: [0, 25, 50, 75, 80, 100],
         required: true,
     },
     savingGoal: {

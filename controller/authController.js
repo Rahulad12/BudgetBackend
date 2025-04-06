@@ -1,9 +1,9 @@
-import User from "../model/User";
+import User from "../model/User.js";
 import bcrypt from "bcryptjs";
-import { tokenGenerator } from "../utils/tokenGenerator";
+import { tokenGenerator } from "../utils/tokenGenerator.js";
 
 const authUser = async (req, res) => {
-    const { username, email, password } = req.body;
+    const { username, password } = req.body;
     try {
         const user = await User.findOne({ username: username });
         if (!user) {
@@ -12,21 +12,28 @@ const authUser = async (req, res) => {
                 message: "User not found"
             })
         }
+
         const isAuth = bcrypt.compare(password, user.password);
+
         if (!isAuth) {
             return res.status(400).json({
                 success: false,
                 message: "Invalid credentails"
             })
         }
-        const token = tokenGenerator(user._id)
+
+        const token = tokenGenerator(user. _id)
         res.status(200).json({
             success: true,
             message: "Login SuccessFull",
             token
         })
     } catch (error) {
-
+        console.log(error);
+        return res.status(500).json({
+            success:false,
+            message:"Internal Server Error"
+        })
     }
 }
 

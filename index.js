@@ -1,31 +1,52 @@
 import express from 'express';
+import dotenv from 'dotenv';
+import cors from 'cors';
 import connectDB from './config/db.js';
 
-import dotenv from 'dotenv';
+// Load environment variables
 dotenv.config();
 
-import cors from 'cors';
+// Initialize app
 const app = express();
-
 const PORT = process.env.PORT || 5000;
 
 // Connect to MongoDB
 connectDB();
+
 // Middleware
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Import routes
+import userRouter from './routes/authRoute.js';
+import budgetRouter from './routes/budgetRoute.js';
+import transactionRouter from './routes/transactionRoute.js';
 
+// Routes
+app.use('/api/auth', userRouter);
+app.use('/api/budgets', budgetRouter);
+app.use('/api/transactions', transactionRouter);
+
+// Root route
 app.get('/', (req, res) => {
-    res.send({
+    return res.send({
         success: true,
-        message: 'server is running...',
+        message: 'Server is running...',
     });
 });
 
+// Optional: Global error handler
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    return res.status(500).json({
+        success: false,
+        message: 'Something went wrong!',
+        error: err.message,
+    });
+});
+
+// Start server
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
-
-

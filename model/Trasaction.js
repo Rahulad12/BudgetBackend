@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import Income from "./Income";
+import Income from "./Income.js";
 const TransactionSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,

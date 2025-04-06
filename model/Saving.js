@@ -13,3 +13,5 @@ const SavingSchema = new mongoose.Schema({
 }, {
     timestamps: true,
 })
+const Saving = mongoose.model("Saving",SavingSchema);
+export default Saving;

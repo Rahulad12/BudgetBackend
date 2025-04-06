@@ -16,28 +16,9 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    transactions: {
-        type: [mongoose.Schema.Types.ObjectId],
-        ref: "Transaction",
-    },
 }, {
     timestamps: true,
 })
-
-// Hash password before saving user
-UserSchema.pre("save", async function (next) {
-    if (!this.isModified("password")) {
-        return next();
-    }
-    try {
-        const salt = await bcrypt.genSalt(10);
-        this.password = await bcrypt.hash(this.password, salt);
-        next();
-    } catch (error) {
-        next(error);
-    }
-});
-
 
 const User = mongoose.model("User", UserSchema);
 export default User;

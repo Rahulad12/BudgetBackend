@@ -22,11 +22,13 @@ app.use(express.urlencoded({ extended: true }));
 import userRouter from './routes/authRoute.js';
 import budgetRouter from './routes/budgetRoute.js';
 import transactionRouter from './routes/transactionRoute.js';
+import incomeRouter from "./routes/incomeRoute.js";
 
 // Routes
 app.use('/api/auth', userRouter);
 app.use('/api/budgets', budgetRouter);
 app.use('/api/transactions', transactionRouter);
+app.use('/api/incomes', incomeRouter);
 
 // Root route
 app.get('/', (req, res) => {

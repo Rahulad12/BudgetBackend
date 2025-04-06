@@ -13,7 +13,7 @@ const authUser = async (req, res) => {
             })
         }
 
-        const isAuth = bcrypt.compare(password, user.password);
+        const isAuth = await bcrypt.compare(password, user.password);
 
         if (!isAuth) {
             return res.status(400).json({
@@ -22,7 +22,7 @@ const authUser = async (req, res) => {
             })
         }
 
-        const token = tokenGenerator(user. _id)
+        const token = tokenGenerator(user._id)
         res.status(200).json({
             success: true,
             message: "Login SuccessFull",
@@ -31,8 +31,8 @@ const authUser = async (req, res) => {
     } catch (error) {
         console.log(error);
         return res.status(500).json({
-            success:false,
-            message:"Internal Server Error"
+            success: false,
+            message: "Internal Server Error"
         })
     }
 }
@@ -40,7 +40,9 @@ const authUser = async (req, res) => {
 const createUser = async (req, res) => {
     const { username, email, password } = req.body;
     try {
-        const existingUser = await User.findOne({ username, email })
+        const existingUser = await User.findOne({
+            $or: [{ username }, { email }]
+        })
         if (existingUser) {
             return res.status(400).json({
                 success: false,

@@ -10,6 +10,19 @@ const createBudget = async (req, res) => {
     const userId = req.user._id;
 
     try {
+        const existingBudget = await Budget.findOne({
+            $or: [
+                { userId: userId },
+                { month: new Date().getMonth() + 1 }
+            ]
+        });
+
+        if (existingBudget) {
+            return res.status(400).json({
+                success: false,
+                message: `Budget already exists for this user for this month ${new Date().getMonth() + 1}`,
+            });
+        }
         const incomes = await Income.find({ userId: userId });
 
         if (!incomes || incomes.length === 0) {
@@ -92,17 +105,14 @@ const createBudget = async (req, res) => {
 const getBudget = async (req, res) => {
     const userId = req.user._id;
     try {
-        const budget = await Budget.find({ userId: userId }).populate("transactionId").populate("income");
+        const budget = await Budget.find({ userId: userId }).select("-createdAt -updatedAt -__v -userId -transactionId -income -_id");
         if (!budget) {
             return res.status(400).json({
                 success: false,
                 message: "Budget Not Found"
             })
         }
-        return res.status(200).json({
-            success: true,
-            budget
-        })
+        return res.status(200).send(budget)
     } catch (error) {
         console.log(error)
         return res.status(500).json({

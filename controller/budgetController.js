@@ -6,9 +6,7 @@ import { budgetValidation } from "../utils/budgetValidation.js";
 
 const createBudget = async (req, res) => {
     const { monthlyexpense, expensethreshold, savinggoal } = req.body;
-
     const userId = req.user._id;
-
     try {
         const existingBudget = await Budget.findOne({
             $or: [

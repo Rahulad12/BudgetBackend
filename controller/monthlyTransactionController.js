@@ -1,47 +1,14 @@
 import MonthlyTransaction from "../model/monthyTransaction.js";
 
-const getMontlyTransaction = async (req, res) => {
-    const userId = req.user._id;
-
-    try {
-        const monthlyTransactions = await MonthlyTransaction.find({ userId })
-            .select("-createdAt -updatedAt -__v -userId -_id -income -expense")
-            .populate({
-                path: "transaction",
-                select: "title amount date category type",
-            });
-
-        if (!monthlyTransactions || monthlyTransactions.length === 0) {
-            return res.status(404).json({
-                success: false,
-                message: "No Monthly Transactions Found",
-            });
-        }
-
-        return res.status(200).json({
-            success: true,
-            message: "Monthly Transactions Fetched Successfully",
-            data: monthlyTransactions
-        });
-
-    } catch (error) {
-        console.error(error);
-        return res.status(500).json({
-            success: false,
-            message: "Internal Server Error",
-        });
-    }
-};
 
 const filterTransaction = async (req, res) => {
     const { month } = req.query;
-    console.log(month);
     const userId = req.user._id;
-    
+
     try {
         // First get the monthYear format (e.g., "04-2025" for April 2025)
-        const monthNames = ["January", "February", "March", "April", "May", "June", 
-                          "July", "August", "September", "October", "November", "December"];
+        const monthNames = ["January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"];
         const monthIndex = monthNames.indexOf(month);
         if (monthIndex === -1) {
             return res.status(400).json({
@@ -49,19 +16,19 @@ const filterTransaction = async (req, res) => {
                 message: "Invalid month name"
             });
         }
-        
+
         const currentYear = new Date().getFullYear();
         const monthYear = `${(monthIndex + 1).toString().padStart(2, '0')}-${currentYear}`;
 
         // Find the monthly transaction for this month/year
-        const monthlyTransaction = await MonthlyTransaction.findOne({ 
+        const monthlyTransaction = await MonthlyTransaction.findOne({
             userId: userId,
-            monthYear: monthYear 
+            monthYear: monthYear
         }).select("-createdAt -updatedAt -__v -userId -_id -income -expense")
-          .populate({
-              path: "transaction",
-              select: "title amount date category type",
-          });
+            .populate({
+                path: "transaction",
+                select: "-createdAt -updatedAt -__v -userId",
+            });
 
         if (!monthlyTransaction) {
             return res.status(404).json({
@@ -79,6 +46,7 @@ const filterTransaction = async (req, res) => {
             monthlyExpense: monthlyTransaction.monthlyExpense,
             monthlyIncome: monthlyTransaction.monthlyIncome,
             transaction: monthlyTransaction.transaction.map(t => ({
+                _id: t._id,
                 title: t.title,
                 amount: t.amount,
                 date: t.date,
@@ -103,4 +71,4 @@ const filterTransaction = async (req, res) => {
 };
 
 
-export { getMontlyTransaction, filterTransaction };
+export {filterTransaction };

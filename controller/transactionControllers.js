@@ -1,7 +1,7 @@
 import Transaction from "../model/Trasaction.js"; // Fixed typo in path
 import Income from "../model/Income.js";
 import MonthlyTransaction from "../model/monthyTransaction.js";
-import Expenses from "../model/expenses.js";
+import Expenses from "../model/Expenses.js";
 import { updateMonthlyBalance } from "../utils/updateMonthlyBalance.js";
 const createTransaction = async (req, res) => {
     const { title, amount, date, type, category } = req.body;

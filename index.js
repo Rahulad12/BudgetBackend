@@ -23,12 +23,14 @@ import userRouter from './routes/authRoute.js';
 import budgetRouter from './routes/budgetRoute.js';
 import transactionRouter from './routes/transactionRoute.js';
 import incomeRouter from "./routes/incomeRoute.js";
+import monthlyTransactionRouter from "./routes/monthlyTransaction.js";
 
 // Routes
 app.use('/api/auth', userRouter);
 app.use('/api/budgets', budgetRouter);
 app.use('/api/transactions', transactionRouter);
 app.use('/api/incomes', incomeRouter);
+app.use('/api/monthlyTransactions', monthlyTransactionRouter);
 
 // Root route
 app.get('/', (req, res) => {

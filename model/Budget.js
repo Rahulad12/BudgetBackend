@@ -22,7 +22,6 @@ const BudgetSchema = new mongoose.Schema({
     },
     expensesThreshold: {
         type: Number,
-        enum: [0, 25, 50, 75, 80, 100],
         required: true,
     },
     savingGoal: {

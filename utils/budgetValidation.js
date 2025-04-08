@@ -16,7 +16,6 @@ export const budgetValidation = (expensethreshold, monthlyexpense, income, savin
 
     const calucateExpense = income * (expensethreshold / 100);
 
-    console.log(monthlyexpense,calucateExpense)
     if (monthlyexpense > calucateExpense) {
         return "Monthly Expense cannot be greater than Expense Threshold for this months";
     }

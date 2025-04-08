@@ -3,9 +3,9 @@ import bcrypt from "bcryptjs";
 import { tokenGenerator } from "../utils/tokenGenerator.js";
 
 const authUser = async (req, res) => {
-    const { username, email, password } = req.body;
+    const { username, password } = req.body;
     try {
-        const user = await User.findOne({ username: username, email: email });
+        const user = await User.findOne({ username: username });
         if (!user) {
             return res.status(400).json({
                 success: false,

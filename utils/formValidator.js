@@ -1,11 +1,9 @@
 export const authValidation = (req, res, next) => {
-    const { username, email, password } = req.body;
+    const { username, password } = req.body;
     if (!username) {
         return res.status(400).json({ success: false, message: "Username is required" });
     }
-    if (!email) {
-        return res.status(400).json({ success: false, message: "Email is required" });
-    }
+
     if (!password) {
         return res.status(400).json({ success: false, message: "Password is required" });
     }
@@ -15,7 +13,7 @@ export const authValidation = (req, res, next) => {
 export const createUserValidation = (req, res, next) => {
     const { username, email, password } = req.body;
 
-   
+
 
     if (!username) {
         return res.status(400).json({ success: false, message: "Username is required" });

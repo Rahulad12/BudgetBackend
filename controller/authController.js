@@ -3,9 +3,9 @@ import bcrypt from "bcryptjs";
 import { tokenGenerator } from "../utils/tokenGenerator.js";
 
 const authUser = async (req, res) => {
-    const { username, password } = req.body;
+    const { username, email, password } = req.body;
     try {
-        const user = await User.findOne({ username: username });
+        const user = await User.findOne({ username: username, email: email });
         if (!user) {
             return res.status(400).json({
                 success: false,
@@ -38,7 +38,9 @@ const authUser = async (req, res) => {
 }
 
 const createUser = async (req, res) => {
-    const { username, email, password } = req.body;
+    let { username, email, password } = req.body;
+    username = username.toLowerCase();
+    email = email.toLowerCase().replace(/\s+/g, '');
     try {
         const existingUser = await User.findOne({
             $or: [{ username }, { email }]
@@ -98,7 +100,7 @@ const updateUser = async (req, res) => {
             return res.status(400).json({ success: false, message: "User not updated" })
         }
 
-        return res.status(200).json({ success: true, message:"User Updated"})
+        return res.status(200).json({ success: true, message: "User Updated" })
     } catch (error) {
         res.status(500).json({ success: false, message: "Internal Server Error" })
     }

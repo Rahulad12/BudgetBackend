@@ -110,7 +110,8 @@ const getBudget = async (req, res) => {
                 message: "Budget Not Found"
             })
         }
-        return res.status(200).send(budget)
+       return res.status(200).send(budget);
+
     } catch (error) {
         console.log(error)
         return res.status(500).json({

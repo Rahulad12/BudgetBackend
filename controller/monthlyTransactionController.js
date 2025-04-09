@@ -1,9 +1,11 @@
 import MonthlyTransaction from "../model/monthyTransaction.js";
+import logger from "../utils/logger.js";
 
 
 const filterTransaction = async (req, res) => {
     const { month } = req.query;
     const userId = req.user._id;
+    logger.info(`Monthly Transaction Filter: ${month} for user ${userId}`);
 
     try {
         // First get the monthYear format (e.g., "04-2025" for April 2025)
@@ -31,6 +33,7 @@ const filterTransaction = async (req, res) => {
             });
 
         if (!monthlyTransaction) {
+            logger.error("No transactions found for this month");
             return res.status(404).json({
                 success: false,
                 message: "No transactions found for this month"

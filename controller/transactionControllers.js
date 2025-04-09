@@ -3,6 +3,7 @@ import Income from "../model/Income.js";
 import MonthlyTransaction from "../model/monthyTransaction.js";
 import Expenses from "../model/Expenses.js";
 import { updateMonthlyBalance } from "../utils/updateMonthlyBalance.js";
+import logger from "../utils/logger.js";
 const createTransaction = async (req, res) => {
     const { title, amount, date, type, category } = req.body;
     const userId = req.user._id;

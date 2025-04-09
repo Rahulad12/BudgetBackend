@@ -34,7 +34,7 @@ const filterTransaction = async (req, res) => {
 
         if (!monthlyTransaction) {
             logger.error("No transactions found for this month");
-            return res.status(404).json({
+            return res.status(400).json({
                 success: false,
                 message: "No transactions found for this month"
             });
